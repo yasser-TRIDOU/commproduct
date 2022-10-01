@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}
+ Shiping-adress
+{% endblock %}
+
+{% block content %}
+    <section class="py-5">
+        <div class="container">
+            <h4 class="mb-4">Shipping Adress</h4>
+            {% if order.billing_adress %}
+                <p>You have already added the adress!<i><b>{{ order.billing_adress.street_adress }}</b></i> do you want to changet</p>
+                <a href="{% url 'frontend:shipadress' %}" class="btn btn-warning">Change Adress</a>
+                <a href="{% url 'frontend:payment' %}" class="btn btn-info">Proced to checkout</a>
+            {% else %}
+                <form action="" method="post" autocomplete="off" class="container">
+                {% csrf_token %}
+                    <div class="form-floating mb-3">
+                        {{ form.street_adress }}
+                        <label for="floatingInput">Street and house number</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.appartment_adress }}
+                        <label for="floatingApartment">Apartement</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{ form.country }}
+                        <label for="floatingSelect">Select country</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.zip_code }}
+                        <label for="floatingZip">Zip code</label>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                    </form>
+            {% endif %}
+        <div class="col-md-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">Your Cart</span>
+            <span class="badge bg-dark text-white ms-1 rounded-pill">{{ order.items.count }}</span>
+        </h4>
+        <ul class="list-group mb-3 z-depth-1">
+            {% for order_item in order.items.all %}
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{ order_item.quantity }}x{{ order_item.item.title }}</h6>
+                    <small class="text-muted">{{ order_item.item.snip_description }}</small>
+                </div>
+                <span class="text-muted">${{ order_item.final_price }}</span>
+                </li>
+            {% endfor %}
+            {% if order.Coupon %}
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <div class="text-success">
+                        <h6 class="my-0">Promo Code</h6>
+                        <small>{{ order.Coupon.code }}</small>
+                    </div>
+                    <span class="text-success">-${{ order.Coupon.amount }}</span>
+
+                </li>
+            {% endif %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Total (USD)</span>
+                <strong>${{ order.total_price }}</strong>
+            </li>
+
+        </ul>
+        {% if display_coupon_form %}
+         <form action="{% url 'frontend:add-coupon' %}" method="post" autocomplete="off" class="container">
+           {% csrf_token %}
+             <div class="input-group">
+                {{ couponform.code }}
+                 <div class="input-group-addon">
+                     <button class="btn btn-info m-0">Redeem</button>
+                 </div>
+             </div>
+            </form>
+        {% endif %}
+        </div>
+
+
+        </div>
+    </section>
+
+{% endblock %}

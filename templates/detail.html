@@ -1,0 +1,48 @@
+
+{% extends 'base.html' %}
+{% block title %}
+{{ object.title }}
+{% endblock %}
+
+{% block content %}
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-md-5 justify-content-center">
+
+                        <div class="col-md-4 mb-5">
+                            <!-- Product image-->
+                            <img class="card-img-top p-2" src={{ object.image.url }} alt="..." style="width: auto ;height: 300px" />
+                            <!-- Product details-->
+                        </div>
+                                <div class="col-md-8 mb-5">
+                                    <h5 class="fw-bolder">{{ object.title}}</h5>
+                                    <!-- Product price-->
+                                    {% if item.discount_price %}
+                                         <p><del class="mt-2 text-danger">{{object.price}}</del>
+                                         {{ item.discount_price }}</p>
+                                        <span class="badge rounded-pill bg-danger">%{{ object.get_discount_percent | floatformat:2 }} off</span>
+                                    {% else %}
+                                        <p>{{object.price}}</p>
+                                    {% endif %}
+
+                                    <span class="badge rounded-pill bg-info">{{ object.get_category_display }}</span>
+                                    <span class="badge rounded-pill bg-info">{{ object.get_label_display }}</span>
+                                    <p>{{ object.descreption }}</p>
+
+
+                                  <!-- Product actions-->
+                                  <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                         <div class="text-center">
+                                               <a class="btn btn-outline-dark mt-auto me-4" href="{% url 'frontend:home' %}">Continue shopping</a>
+                                               <a class="btn btn-outline-dark mt-auto " href="{{ object.get_add_to_cart }}">Add to cart <i class="bi-cart-fill me-1"></i></a>
+                                         </div>
+                                  </div>
+                                </div>
+
+
+
+                </div>
+
+            </div>
+        </section>
+{% endblock %}

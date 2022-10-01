@@ -1,0 +1,45 @@
+
+{% extends 'base.html' %}
+{% block title %}
+Ecom |shop
+{% endblock %}
+
+{% block content %}
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    {% for item in object_list %}
+                  <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top p-2" src={{ item.image.url }} alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">{{ item.title}}</h5>
+                                    <!-- Product price-->
+                                    {% if item.discount_price %}
+                                         <p><del class="mt-2 text-danger">{{item.price}}</del>
+                                         {{ item.discount_price }}</p>
+                                        <span class="badge rounded-pill bg-danger">%{{ item.get_discount_percent | floatformat:2 }} off</span>
+                                    {% else %}
+                                        <p>{{item.price}}</p>
+                                    {% endif %}
+
+                                    <span class="badge rounded-pill bg-info">{{ item.get_category_display }}</span>
+                                    <span class="badge rounded-pill bg-info">{{ item.get_label_display }}</span>
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ item.get_item_url }}">View options</a></div>
+                            </div>
+                        </div>
+                    </div>
+                     {% endfor %}
+                </div>
+
+            </div>
+        </section>
+{% endblock %}
